@@ -1,6 +1,5 @@
 package com.danielpasser.randomusers.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +16,21 @@ class UserAdapter(private var onClickListener: OnClickListener) :
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(user: User, onClickListener: OnClickListener) {
+
             itemView.apply {
-                itemView.setOnClickListener { onClickListener.onClickItem(user) }
+                setOnClickListener { onClickListener.onClickItem(user) }
+                setOnLongClickListener {
+                    onClickListener.onLongClickItem(user)
+                    return@setOnLongClickListener true
+                }
 
                 findViewById<TextView>(R.id.item_view_text_view_name).text =
-                    user.name?.first + " " + user.name?.last
+                    user.name?.first +" " + user.name?.last
 
                 findViewById<TextView>(R.id.item_view_text_view_email).text = user.email
 
                 Glide.with(context).load(user.picture?.thumbnail)
-                    .into(findViewById<ImageView>(R.id.item_view_image_view));
+                    .into(findViewById(R.id.item_view_image_view))
             }
         }
     }
@@ -49,9 +53,11 @@ class UserAdapter(private var onClickListener: OnClickListener) :
         notifyDataSetChanged()
     }
 
+
     interface OnClickListener {
         fun onClickItem(user: User)
-
+        fun onLongClickItem(user: User)
     }
+
 
 }

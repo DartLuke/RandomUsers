@@ -1,5 +1,8 @@
 package com.danielpasser.randomusers.ui.userListFragment
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,9 +12,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.danielpasser.randomusers.models.User
 import com.danielpasser.randomusers.ui.adapter.UserAdapter
 import com.danielpasser.randomusers.utils.DataState
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class UserListFragment : Fragment(), UserAdapter.OnClickListener {
@@ -116,8 +118,11 @@ class UserListFragment : Fragment(), UserAdapter.OnClickListener {
     }
 
     override fun onClickItem(user: User) {
-        switchFragment(user)
+         switchFragment(user)
+    }
 
+    override fun onLongClickItem(user: User) {
+        sendEmail(user)
     }
 
     private fun switchFragment(user: User) {
@@ -127,13 +132,38 @@ class UserListFragment : Fragment(), UserAdapter.OnClickListener {
     }
 
     private fun finishOnBackPressed() {
-        val dd = requireActivity().onBackPressedDispatcher?.addCallback(
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    requireActivity().finishAndRemoveTask();
-                    System.exit(0);
+                    requireActivity().finishAndRemoveTask()
+                    System.exit(0)
                 }
             })
+    }
+
+    private fun sendEmail(user: User) {
+        val intent = Intent(Intent.ACTION_SEND)
+
+        intent.apply {
+            data = Uri.parse("mailto:")
+            type = "message/rfc822"
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(user.email))
+        }
+
+
+
+        try {
+            startActivity(Intent.createChooser(intent, "Send mail..."))
+
+            Log.v("Test", "Finished sending email...")
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(
+                context,
+                "There is no email client installed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
     }
 }
