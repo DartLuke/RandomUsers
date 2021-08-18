@@ -1,35 +1,19 @@
 package com.danielpasser.randomusers.ui
 
-import android.os.Build
+
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.danielpasser.randomusers.R
-import com.danielpasser.randomusers.models.Dob
 import com.danielpasser.randomusers.models.User
 import com.danielpasser.randomusers.utils.Utils
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UserDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserDetailsFragment : Fragment() {
 
     private val safeArgs: UserDetailsFragmentArgs by navArgs()
@@ -50,8 +34,10 @@ class UserDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.user_details_text_view_name).text = user.name?.first + " " + user.name?.last
-        view.findViewById<TextView>(R.id.user_details_text_birthday).text = Utils.daysUntilBirthDay(user.dob)
+        view.findViewById<TextView>(R.id.user_details_text_view_name).text =
+            user.name?.first + " " + user.name?.last
+        view.findViewById<TextView>(R.id.user_details_text_birthday).text =
+            Utils.daysUntilBirthDay(user.dob)
         Glide.with(view.context).load(user.picture?.thumbnail)
             .into(view.findViewById<ImageView>(R.id.user_details_image_view));
 
