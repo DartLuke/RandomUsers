@@ -1,14 +1,10 @@
-package com.danielpasser.randomusers
+package com.danielpasser.randomusers.ui.decorators
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class SpaceItemDecoration : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, itemPosition: Int, parent: RecyclerView) {
-        super.getItemOffsets(outRect, itemPosition, parent)
-    }
-
 
     override fun getItemOffsets(
         outRect: Rect,

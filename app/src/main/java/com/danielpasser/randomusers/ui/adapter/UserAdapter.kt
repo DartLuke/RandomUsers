@@ -25,7 +25,7 @@ class UserAdapter(private var onClickListener: OnClickListener) :
                 }
 
                 findViewById<TextView>(R.id.item_view_text_view_name).text =
-                    user.name?.first +" " + user.name?.last
+                    user.name?.first + " " + user.name?.last
 
                 findViewById<TextView>(R.id.item_view_text_view_email).text = user.email
 
@@ -45,12 +45,15 @@ class UserAdapter(private var onClickListener: OnClickListener) :
     }
 
     override fun getItemCount() = users.size
+
     fun changeData(_users: List<User>) {
         users.apply {
             clear()
             addAll(_users)
         }
+        sortByBirth()
         notifyDataSetChanged()
+
     }
 
 
@@ -59,5 +62,10 @@ class UserAdapter(private var onClickListener: OnClickListener) :
         fun onLongClickItem(user: User)
     }
 
+    private fun sortByBirth() {
+        users.sortBy { user ->
+            user.dob?.date
+        }
+    }
 
 }

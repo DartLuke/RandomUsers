@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.danielpasser.randomusers.R
-import com.danielpasser.randomusers.SpaceItemDecoration
+import com.danielpasser.randomusers.ui.decorators.SpaceItemDecoration
 import com.danielpasser.randomusers.models.User
 import com.danielpasser.randomusers.ui.adapter.UserAdapter
 import com.danielpasser.randomusers.utils.DataState
@@ -79,12 +78,12 @@ class UserListFragment : Fragment(), UserAdapter.OnClickListener {
             when (dataState) {
                 is DataState.Success<List<User>> -> {
                     changeListViewData(dataState.data)
-                    showRecycleView(true)
+                   showRecycleView(true)
                     showProgressBar(false)
                 }
                 is DataState.Error -> {
                     showProgressBar(false)
-                    showRecycleView(true)
+                   showRecycleView(true)
                     displayError(dataState.exception.message)
                 }
                 is DataState.Loading -> {
@@ -110,7 +109,7 @@ class UserListFragment : Fragment(), UserAdapter.OnClickListener {
     }
 
     private fun showRecycleView(isVisible: Boolean) {
-        progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+        recyclerView.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun changeListViewData(users: List<User>) {
@@ -150,13 +149,8 @@ class UserListFragment : Fragment(), UserAdapter.OnClickListener {
             type = "message/rfc822"
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(user.email))
         }
-
-
-
         try {
             startActivity(Intent.createChooser(intent, "Send mail..."))
-
-            Log.v("Test", "Finished sending email...")
         } catch (ex: ActivityNotFoundException) {
             Toast.makeText(
                 context,
